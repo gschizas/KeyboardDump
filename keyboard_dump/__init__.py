@@ -65,7 +65,7 @@ def key_value(kbd, key, shift_state):
 
 
 def installed_languages():
-    return ['{0:08x}'.format(kbd) for kbd in win32api.GetKeyboardLayoutList() if kbd > 0]
+    return ['{0:08x}'.format(kbd) for kbd in win32api.GetKeyboardLayoutList()]
     # int keyboardLayoutList = SafeNativeMethods.GetKeyboardLayoutList(0, (IntPtr[]) null);
     # IntPtr[] hkls = new IntPtr[keyboardLayoutList];
     # SafeNativeMethods.GetKeyboardLayoutList(keyboardLayoutList, hkls);

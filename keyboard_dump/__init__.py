@@ -37,7 +37,7 @@ def load_indirect_string(name):
 
 @contextmanager
 def load_keyboard(layout_id):
-    existing = layout_id in installed_languages()
+    existing = layout_id in current_languages()
     kbd = _load_keyboard_layout(layout_id)
     yield kbd
     if not existing:
@@ -73,7 +73,7 @@ def key_value(kbd, key, shift_state):
     return _decode(buff)
 
 
-def installed_languages():
+def current_languages():
     return ['{0:08x}'.format(kbd) for kbd in win32api.GetKeyboardLayoutList()]
     # int keyboardLayoutList = SafeNativeMethods.GetKeyboardLayoutList(0, (IntPtr[]) null);
     # IntPtr[] hkls = new IntPtr[keyboardLayoutList];

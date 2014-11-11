@@ -62,23 +62,6 @@ def key_value(kbd, key, shift_state):
     result = ctypes.windll.user32.ToUnicodeEx(key, scan_code, bytes(keystate), buff, 256, 0, kbd)
     return _decode(buff)
 
-    print()
-    print(ctypes.windll.user32.MapVirtualKeyExW(0, 3, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(1, 3, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(2, 3, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(3, 3, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(13, 3, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(14, 3, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(18, 3, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(14, 2, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(65, 2, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(65, 0, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(0x14, 0, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(65, 2, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(65, 4, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(65, 3, kbd))
-    print(ctypes.windll.user32.MapVirtualKeyExW(0x30, 3, kbd))
-
 
 def _decode(buff):
     return buff.decode('utf-16le').strip('\0')

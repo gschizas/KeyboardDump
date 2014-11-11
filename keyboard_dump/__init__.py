@@ -3,6 +3,7 @@
 import ctypes
 import winreg
 import win32api
+from contextlib import contextmanager
 
 
 def installed_layouts():
@@ -34,12 +35,20 @@ def load_indirect_string(name):
     return buff.decode('UTF-16LE')
 
 
-def load_keyboard_layout(layout_id):
-    kbd = win32api.LoadKeyboardLayout(layout_id)
-    return kbd
+@contextmanager
+def load_keyboard(layout_id):
+    existing = layout_id in installed_languages()
+    kbd = _load_keyboard_layout(layout_id)
+    yield kbd
+    if not existing:
+        _unload_keyboard_layout(kbd)
 
 
-def unload_keyboard_layout(kbd):
+def _load_keyboard_layout(layout_id):
+    return ctypes.windll.user32.LoadKeyboardLayoutW(layout_id)
+
+
+def _unload_keyboard_layout(kbd):
     ctypes.windll.user32.UnloadKeyboardLayout(kbd)
 
 

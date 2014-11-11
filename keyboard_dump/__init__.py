@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import ctypes
 import winreg
+import win32api
 
 
 def installed_layouts():
@@ -34,7 +35,7 @@ def load_indirect_string(name):
 
 
 def load_keyboard_layout(layout_id):
-    kbd = ctypes.windll.user32.LoadKeyboardLayoutW(layout_id)
+    kbd = win32api.LoadKeyboardLayout(layout_id)
     return kbd
 
 
@@ -61,6 +62,17 @@ def key_value(kbd, key, shift_state):
     scan_code = ctypes.windll.user32.MapVirtualKeyExW(key, 3, kbd)
     result = ctypes.windll.user32.ToUnicodeEx(key, scan_code, bytes(keystate), buff, 256, 0, kbd)
     return _decode(buff)
+
+
+def installed_languages():
+    return ['{0:08x}'.format(kbd) for kbd in win32api.GetKeyboardLayoutList() if kbd > 0]
+    # int keyboardLayoutList = SafeNativeMethods.GetKeyboardLayoutList(0, (IntPtr[]) null);
+    # IntPtr[] hkls = new IntPtr[keyboardLayoutList];
+    # SafeNativeMethods.GetKeyboardLayoutList(keyboardLayoutList, hkls);
+    # InputLanguage[] inputLanguageArray = new InputLanguage[keyboardLayoutList];
+    # for (int index = 0; index < keyboardLayoutList; ++index)
+    # inputLanguageArray[index] = new InputLanguage(hkls[index]);
+    # return new InputLanguageCollection(inputLanguageArray);
 
 
 def _decode(buff):

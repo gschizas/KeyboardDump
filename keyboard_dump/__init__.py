@@ -4,6 +4,9 @@ import ctypes
 import winreg
 import win32api
 from contextlib import contextmanager
+from . import virtual_keys
+
+_installed_layouts = None
 
 
 def installed_layouts():
@@ -12,13 +15,18 @@ def installed_layouts():
     kbd_layouts = []  # collections.OrderedDict()
     while True:
         try:
-            layout_id = winreg.EnumKey(kbd_layout_root, i)
-            layout_key = winreg.OpenKey(kbd_layout_root, layout_id)
-            layout_name = winreg.QueryValueEx(layout_key, 'Layout Text')[0]
+            layout_id_text = winreg.EnumKey(kbd_layout_root, i)
+            layout_key = winreg.OpenKey(kbd_layout_root, layout_id_text)
+            layout_text = winreg.QueryValueEx(layout_key, 'Layout Text')[0]
             layout_display_name = winreg.QueryValueEx(layout_key, 'Layout Display Name')[0]
             i += 1
             winreg.CloseKey(layout_key)
-            kbd_layouts.append(dict(id=layout_id, name=layout_name, display=layout_display_name))
+            if layout_display_name.startswith('@'):
+                layout_display_name = load_indirect_string(layout_display_name)
+            layout_id = int(layout_id_text, 16)
+            if layout_id & 0xFFFF0000 == 0:
+                layout_id += layout_id << 16
+            kbd_layouts.append(dict(id='{0:08x}'.format(layout_id), name=layout_text, display=layout_display_name))
         except OSError as e:
             if e.winerror == 259:
                 break
@@ -32,13 +40,21 @@ def load_indirect_string(name):
     buff = bytes(256)
     shlwapi = ctypes.windll.LoadLibrary('C:/Windows/system32/shlwapi.dll')
     shlwapi.SHLoadIndirectString(name, buff, 256, None)
-    return buff.decode('UTF-16LE')
+    return buff.decode('UTF-16LE').strip('\0')
 
 
 @contextmanager
-def load_keyboard(layout_id):
-    existing = layout_id in current_languages()
-    kbd = _load_keyboard_layout(layout_id)
+def load_keyboard(layout_name):
+    layout_id = int(layout_name, 16)
+    if layout_id & 0xFFFF0000 == 0:
+        layout_id += layout_id << 16
+    existing = '{0:08x}'.format(layout_id) in current_languages()
+    layout_to_load_hi = layout_id & 0xFFFF0000 >> 16
+    layout_to_load_lo = layout_id & 0xFFFF
+    if layout_to_load_hi == layout_to_load_lo:
+        layout_to_load_hi = 0
+    layout_to_load = (layout_to_load_hi << 16) + layout_to_load_lo
+    kbd = _load_keyboard_layout('{0:08x}'.format(layout_to_load))
     yield kbd
     if not existing:
         _unload_keyboard_layout(kbd)
@@ -69,12 +85,18 @@ def key_value(kbd, key, shift_state):
         keystate[20] = 0x80
 
     scan_code = ctypes.windll.user32.MapVirtualKeyExW(key, 3, kbd)
-    result = ctypes.windll.user32.ToUnicodeEx(key, scan_code, bytes(keystate), buff, 256, 0, kbd)
-    return _decode(buff)
+    first_len = ctypes.windll.user32.ToUnicodeEx(key, scan_code, bytes(keystate), buff, 256, 0, kbd)
+    result = _decode(buff)
+    if first_len < 0:  # dead character?
+        space_scan_code = ctypes.windll.user32.MapVirtualKeyExW(key, 3, kbd)
+        ctypes.windll.user32.ToUnicodeEx(
+            virtual_keys.VK_SPACE, space_scan_code, bytes(bytearray(256)), buff, 256, 0, kbd)
+        result = '\u2588' + result # + '\u2591' + _decode(buff)
+    return result
 
 
 def current_languages():
-    return ['{0:08x}'.format(kbd) for kbd in win32api.GetKeyboardLayoutList()]
+    return ['{0:08x}'.format(ctypes.c_uint(kbd).value) for kbd in win32api.GetKeyboardLayoutList()]
     # int keyboardLayoutList = SafeNativeMethods.GetKeyboardLayoutList(0, (IntPtr[]) null);
     # IntPtr[] hkls = new IntPtr[keyboardLayoutList];
     # SafeNativeMethods.GetKeyboardLayoutList(keyboardLayoutList, hkls);
@@ -86,3 +108,14 @@ def current_languages():
 
 def _decode(buff):
     return buff.decode('utf-16le').strip('\0')
+
+
+def layout_name(kbd_id):
+    global _installed_layouts
+    if _installed_layouts is None:
+        _installed_layouts = installed_layouts()
+    keyboards = [kbd for kbd in _installed_layouts if kbd['id'] == kbd_id]
+    if keyboards:
+        return keyboards[0]['display']
+    else:
+        return '?' + kbd_id + '?'

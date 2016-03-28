@@ -5,14 +5,14 @@ import winreg
 import win32api
 from contextlib import contextmanager
 
-from shell import kbd, shift_state
 from . import virtual_keys
 
 _installed_layouts = None
 
 dead_key_ref = 0
 
-dead_key_refs = ''.join([chr(x) for x in range(0x2776, 0x2780)]) +  ''.join([chr(x) for x in range(0x24EB, 0x24F5)])
+dead_key_refs = ''.join([chr(x) for x in range(0x2776, 0x2780)]) + ''.join([chr(x) for x in range(0x24EB, 0x24F5)])
+
 
 def installed_layouts():
     kbd_layout_root = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SYSTEM\CurrentControlSet\Control\Keyboard Layouts')
@@ -95,12 +95,12 @@ def key_value(kbd, key, shift_state):
     first_len = ctypes.windll.user32.ToUnicodeEx(key, scan_code, bytes(keystate), buff, 256, 0, kbd)
     result = _decode(buff)
     if first_len < 0:  # dead character?
-        #space_scan_code = ctypes.windll.user32.MapVirtualKeyExW(key, 3, kbd)
-        #ctypes.windll.user32.ToUnicodeEx(
+        # space_scan_code = ctypes.windll.user32.MapVirtualKeyExW(key, 3, kbd)
+        # ctypes.windll.user32.ToUnicodeEx(
         #    virtual_keys.VK_SPACE, space_scan_code, bytes(bytearray(256)), buff, 256, 0, kbd)
-        #result = '\u2588' + result # + '\u2591' + _decode(buff)
+        # result = '\u2588' + result # + '\u2591' + _decode(buff)
         result = dead_key_refs[dead_key_ref % len(dead_key_refs)]
-        dead_key_ref += 1        
+        dead_key_ref += 1
     elif result == '':
         result = '\u00a0'
     return result
@@ -132,5 +132,5 @@ def layout_name(kbd_id):
         return '?' + kbd_id + '?'
 
 
-def keyboard_row(key_list):
-    return '\xb7'.join(keyboard_dump.key_values(kbd, *key_list, shift_state=shift_state))
+def keyboard_row(kbd, key_list, shift_state):
+    return '\xb7'.join(key_values(kbd, *key_list, shift_state=shift_state))

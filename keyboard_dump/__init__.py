@@ -80,13 +80,13 @@ def key_value(kbd, key, shift_state):
     buff = bytes(256)
     keystate = bytearray(256)
     if 'shift' in shift_state:
-        keystate[16] = 0x80
+        keystate[virtual_keys.VK_SHIFT] = 0x80
     if 'control' in shift_state:
-        keystate[17] = 0x80
+        keystate[virtual_keys.VK_CONTROL] = 0x80
     if 'alt_gr' in shift_state:
-        keystate[18] = 0x80
+        keystate[virtual_keys.VK_MENU] = 0x80
     if 'caps' in shift_state:
-        keystate[20] = 0x80
+        keystate[virtual_keys.VK_CAPITAL] = 0x80
 
     scan_code = ctypes.windll.user32.MapVirtualKeyExW(key, 3, kbd)
     first_len = ctypes.windll.user32.ToUnicodeEx(key, scan_code, bytes(keystate), buff, 256, 0, kbd)

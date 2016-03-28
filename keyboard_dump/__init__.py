@@ -98,6 +98,8 @@ def key_value(kbd, key, shift_state):
         #result = '\u2588' + result # + '\u2591' + _decode(buff)
         result = dead_key_refs[dead_key_ref]
         dead_key_ref += 1        
+    elif result == '':
+        result = '\u00a0'
     return result
 
 

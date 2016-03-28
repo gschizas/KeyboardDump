@@ -23,26 +23,14 @@ with open('output.txt', 'w', encoding='utf_8_sig') as output_file:
         with keyboard_dump.load_keyboard(kbd_id) as kbd:
             print('=' * 20, keyboard_dump.layout_name(kbd_id), '=' * 20, file=output_file)
             for shift_state in (['normal'], ['shift'], ['alt_gr'], ['shift', 'alt_gr']):
+                row_1 = SEP.join(keyboard_dump.key_values(kbd, *VKK_ROW_1, shift_state=shift_state))
+                row_2 = SEP.join(keyboard_dump.key_values(kbd, *VKK_ROW_2, shift_state=shift_state))
+                row_3 = SEP.join(keyboard_dump.key_values(kbd, *VKK_ROW_3, shift_state=shift_state))
+                row_4 = SEP.join(keyboard_dump.key_values(kbd, *VKK_ROW_4, shift_state=shift_state))
                 # shift_state = ['shift']  # ['control', 'alt_gr', 'shift']
                 print('--' * 10, '+'.join(shift_state), '--' * 10, file=output_file)
-                print('Row 1:', SEP.join(keyboard_dump.key_values(
-                    kbd,
-                    VK_OEM_3, VK_1, VK_2, VK_3, VK_4, VK_5, VK_6, VK_7, VK_8, VK_9, VK_0,
-                    VK_OEM_MINUS, VK_OEM_PLUS,
-                    shift_state=shift_state)), file=output_file)
-                print('Row 2:   ', SEP.join(keyboard_dump.key_values(
-                    kbd,
-                    VK_Q, VK_W, VK_E, VK_R, VK_T, VK_Y, VK_U, VK_I, VK_O, VK_P,
-                    VK_OEM_4, VK_OEM_6, VK_OEM_5,
-                    shift_state=shift_state)), file=output_file)
-                print('Row 3:    ', SEP.join(keyboard_dump.key_values(
-                    kbd,
-                    VK_A, VK_S, VK_D, VK_F, VK_G, VK_H, VK_J, VK_K, VK_L,
-                    VK_OEM_1, VK_OEM_7, VK_OEM_8,
-                    shift_state=shift_state)), file=output_file)
-                print('Row 4:     ', SEP.join(keyboard_dump.key_values(
-                    kbd,
-                    VK_Z, VK_X, VK_C, VK_V, VK_B, VK_N, VK_M,
-                    VK_OEM_COMMA, VK_OEM_PERIOD, VK_OEM_2,
-                    shift_state=shift_state)), file=output_file)
+                print('Row 1:', row_1, file=output_file)
+                print('Row 2:   ', row_2, file=output_file)
+                print('Row 3:    ', row_3, file=output_file)
+                print('Row 4:     ', row_4, file=output_file)
                 print('', file=output_file)

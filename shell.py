@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import ruamel.yaml as yaml
-
 import keyboard
 
 kbd_layouts = keyboard.installed_layouts()
-_debug = yaml.dump(kbd_layouts)
 kbd_layout = [kbd for kbd in kbd_layouts if kbd['name'].startswith('Greek')][0]
 greek_layouts = [kbd for kbd in kbd_layouts if 'Greek' in kbd['name']]
 german_layouts = [kbd for kbd in kbd_layouts if 'German' in kbd['name']]

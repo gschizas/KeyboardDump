@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import sys
 
 import ruamel.yaml as yaml
-import json
 
 import keyboard_dump
-from keyboard_dump.virtual_keys import *
+from keyboard_dump.virtual_keys import VKK_ROW_1, VKK_ROW_2, VKK_ROW_3, VKK_ROW_4
 
 SEP = '\xb7'
 

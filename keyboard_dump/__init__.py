@@ -8,6 +8,9 @@ from . import virtual_keys
 
 _installed_layouts = None
 
+dead_key_ref = 0
+
+dead_key_refs = ''.join([chr(x) for x in range(0x2776, 0x2780)]) +  ''.join([chr(x) for x in range(0x24EB, 0x24F5)])
 
 def installed_layouts():
     kbd_layout_root = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r'SYSTEM\CurrentControlSet\Control\Keyboard Layouts')
@@ -73,6 +76,7 @@ def key_values(kbd, *keys, shift_state):
 
 
 def key_value(kbd, key, shift_state):
+    global dead_key_ref
     buff = bytes(256)
     keystate = bytearray(256)
     if 'shift' in shift_state:
@@ -92,6 +96,8 @@ def key_value(kbd, key, shift_state):
         ctypes.windll.user32.ToUnicodeEx(
             virtual_keys.VK_SPACE, space_scan_code, bytes(bytearray(256)), buff, 256, 0, kbd)
         result = '\u2588' + result # + '\u2591' + _decode(buff)
+        result = dead_key_refs[dead_key_ref]
+        dead_key_ref += 1        
     return result
 
 

@@ -92,10 +92,10 @@ def key_value(kbd, key, shift_state):
     first_len = ctypes.windll.user32.ToUnicodeEx(key, scan_code, bytes(keystate), buff, 256, 0, kbd)
     result = _decode(buff)
     if first_len < 0:  # dead character?
-        space_scan_code = ctypes.windll.user32.MapVirtualKeyExW(key, 3, kbd)
-        ctypes.windll.user32.ToUnicodeEx(
-            virtual_keys.VK_SPACE, space_scan_code, bytes(bytearray(256)), buff, 256, 0, kbd)
-        result = '\u2588' + result # + '\u2591' + _decode(buff)
+        #space_scan_code = ctypes.windll.user32.MapVirtualKeyExW(key, 3, kbd)
+        #ctypes.windll.user32.ToUnicodeEx(
+        #    virtual_keys.VK_SPACE, space_scan_code, bytes(bytearray(256)), buff, 256, 0, kbd)
+        #result = '\u2588' + result # + '\u2591' + _decode(buff)
         result = dead_key_refs[dead_key_ref]
         dead_key_ref += 1        
     return result

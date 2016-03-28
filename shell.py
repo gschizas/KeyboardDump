@@ -18,8 +18,8 @@ german_layouts = [kbd for kbd in kbd_layouts if 'German' in kbd['name']]
 english_layouts = [kbd for kbd in kbd_layouts if 'English' in kbd['name']]
 
 with open('output.txt', 'w', encoding='utf_8_sig') as output_file:
-    for kbd_id in ('04090409', '00020409'):
-    # for kbd_id in ('00020409', ):    
+    for kbd_layout in greek_layouts:  # ('04090409', '00020409'):
+        kbd_id = kbd_layout['id']
         with keyboard_dump.load_keyboard(kbd_id) as kbd:
             print('=' * 20, keyboard_dump.layout_name(kbd_id), '=' * 20, file=output_file)
             for shift_state in (['normal'], ['shift'], ['alt_gr'], ['shift', 'alt_gr']):

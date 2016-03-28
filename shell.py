@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-import yaml
+import ruamel.yaml as yaml
 import json
 
 import keyboard_dump

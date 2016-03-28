@@ -84,6 +84,7 @@ def key_value(kbd, key, shift_state):
     if 'control' in shift_state:
         keystate[virtual_keys.VK_CONTROL] = 0x80
     if 'alt_gr' in shift_state:
+        keystate[virtual_keys.VK_CONTROL] = 0x80
         keystate[virtual_keys.VK_MENU] = 0x80
     if 'caps' in shift_state:
         keystate[virtual_keys.VK_CAPITAL] = 0x80

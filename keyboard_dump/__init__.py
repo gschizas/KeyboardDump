@@ -64,7 +64,7 @@ def load_keyboard(layout_name):
 
 
 def _load_keyboard_layout(layout_id):
-    return ctypes.windll.user32.LoadKeyboardLayoutW(layout_id)
+    return ctypes.windll.user32.LoadKeyboardLayoutW(layout_id, 0)
 
 
 def _unload_keyboard_layout(kbd):

@@ -52,12 +52,12 @@ def load_keyboard(layout_name):
     if layout_id & 0xFFFF0000 == 0:
         layout_id += layout_id << 16
     existing = '{0:08x}'.format(layout_id) in current_languages()
-    layout_to_load_hi = layout_id & 0xFFFF0000 >> 16
-    layout_to_load_lo = layout_id & 0xFFFF
+    layout_to_load_hi = (layout_id & 0xFFFF0000) >> 16
+    layout_to_load_lo = (layout_id & 0xFFFF)
     if layout_to_load_hi == layout_to_load_lo:
         layout_to_load_hi = 0
     layout_to_load = (layout_to_load_hi << 16) + layout_to_load_lo
-    kbd = _load_keyboard_layout('{0:08x}'.format(layout_to_load))
+    kbd = _load_keyboard_layout('{:08x}'.format(layout_to_load))
     yield kbd
     if not existing:
         _unload_keyboard_layout(kbd)

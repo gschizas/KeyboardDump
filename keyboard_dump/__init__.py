@@ -97,7 +97,7 @@ def key_value(kbd, key, shift_state):
         #ctypes.windll.user32.ToUnicodeEx(
         #    virtual_keys.VK_SPACE, space_scan_code, bytes(bytearray(256)), buff, 256, 0, kbd)
         #result = '\u2588' + result # + '\u2591' + _decode(buff)
-        result = dead_key_refs[dead_key_ref]
+        result = dead_key_refs[dead_key_ref % len(dead_key_refs)]
         dead_key_ref += 1        
     elif result == '':
         result = '\u00a0'

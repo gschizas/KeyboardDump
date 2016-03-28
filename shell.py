@@ -17,36 +17,6 @@ greek_layouts = [kbd for kbd in kbd_layouts if 'Greek' in kbd['name']]
 german_layouts = [kbd for kbd in kbd_layouts if 'German' in kbd['name']]
 english_layouts = [kbd for kbd in kbd_layouts if 'English' in kbd['name']]
 
-# print(kbd_layouts)
-# print(json.dumps(kbd_layouts))
-# print(greek_layouts)
-# print(german_layouts)
-# print(english_layouts)
-# print(keyboard_dump.current_languages())
-# all_layouts = {'Greek': greek_layouts, 'English': english_layouts, 'German': german_layouts}
-# print(yaml.dump(all_layouts, default_flow_style=False))
-# existing = layout_id in current_languages()
-# kbd = _load_keyboard_layout(layout_id)
-# yield kbd
-# if not existing:
-#        _unload_keyboard_layout(kbd)
-
-
-#def _load_keyboard_layout(layout_id):
-#    return ctypes.windll.user32.LoadKeyboardLayoutW(layout_id)
-
-
-# layout_name = kbd_layout['display']
-# print(keyboard_dump.load_indirect_string(layout_name))
-# layout_name_2 = layout_name.replace('5046', '5084')
-# print(keyboard_dump.load_indirect_string(layout_name_2))
-# print(keyboard_dump.installed_layouts())
-# print(keyboard_dump.current_languages())
-
-# with keyboard_dump.load_keyboard(kbd_layout['id']) as kbd:
-#with keyboard_dump.load_keyboard('04090409') as kbd:
-# for kbd_id in ('04090409', '04080408', '04070407', '08090409', '00020409'):
-
 with open('output.txt', 'w', encoding='utf_8_sig') as output_file:
     for kbd_id in ('04090409', '00020409'):
     # for kbd_id in ('00020409', ):    

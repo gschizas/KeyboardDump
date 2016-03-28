@@ -4,6 +4,8 @@ import ctypes
 import winreg
 import win32api
 from contextlib import contextmanager
+
+from shell import kbd, shift_state
 from . import virtual_keys
 
 _installed_layouts = None
@@ -128,3 +130,7 @@ def layout_name(kbd_id):
         return keyboards[0]['display']
     else:
         return '?' + kbd_id + '?'
+
+
+def keyboard_row(key_list):
+    return '\xb7'.join(keyboard_dump.key_values(kbd, *key_list, shift_state=shift_state))

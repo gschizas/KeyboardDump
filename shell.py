@@ -10,7 +10,7 @@ german_layouts = [kbd for kbd in kbd_layouts if 'German' in kbd['name']]
 english_layouts = [kbd for kbd in kbd_layouts if kbd['id'].endswith('0409')]
 
 with open('output.txt', 'w', encoding='utf_8_sig') as output_file:
-    for kbd_layout in greek_layouts:  # ('04090409', '00020409'):
+    for kbd_layout in english_layouts:  # ('04090409', '00020409'):
         kbd_id = kbd_layout['id']
         with keyboard.load_keyboard(kbd_id) as kbd:
             print('=' * 20, keyboard.layout_name(kbd_id) + ' ({})'.format(kbd_id), '=' * 20, file=output_file)

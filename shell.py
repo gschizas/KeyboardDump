@@ -13,7 +13,7 @@ with open('output.txt', 'w', encoding='utf_8_sig') as output_file:
     for kbd_layout in greek_layouts:  # ('04090409', '00020409'):
         kbd_id = kbd_layout['id']
         with keyboard.load_keyboard(kbd_id) as kbd:
-            print('=' * 20, keyboard.layout_name(kbd_id), '=' * 20, file=output_file)
+            print('=' * 20, keyboard.layout_name(kbd_id) + ' ({})'.format(kbd_id), '=' * 20, file=output_file)
             for shift_state in (['normal'], ['shift'], ['alt_gr'], ['shift', 'alt_gr']):
                 row_1 = keyboard.keyboard_row(kbd, keyboard.virtual_keys.VKK_ROW_1, shift_state)
                 row_2 = keyboard.keyboard_row(kbd, keyboard.virtual_keys.VKK_ROW_2, shift_state)

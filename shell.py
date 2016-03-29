@@ -7,7 +7,7 @@ kbd_layouts = keyboard.installed_layouts()
 kbd_layout = [kbd for kbd in kbd_layouts if kbd['name'].startswith('Greek')][0]
 greek_layouts = [kbd for kbd in kbd_layouts if 'Greek' in kbd['name']]
 german_layouts = [kbd for kbd in kbd_layouts if 'German' in kbd['name']]
-english_layouts = [kbd for kbd in kbd_layouts if 'English' in kbd['name']]
+english_layouts = [kbd for kbd in kbd_layouts if kbd['id'].endswith('0409')]
 
 with open('output.txt', 'w', encoding='utf_8_sig') as output_file:
     for kbd_layout in greek_layouts:  # ('04090409', '00020409'):
